@@ -1,4 +1,4 @@
-Newonsoft.Msgpack
+Newtonsoft.Msgpack
 =================
 
 This project brings [msgpack-cli][MsgPackCliLink] to [Json.NET][JsonNetLink].

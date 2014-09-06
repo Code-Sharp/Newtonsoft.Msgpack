@@ -16,7 +16,7 @@ namespace Newtonsoft.Msgpack
             mState = new State(this, unpacker, null);
         }
 
-        public Unpacker Unpacker
+        private Unpacker Unpacker
         {
             get
             {

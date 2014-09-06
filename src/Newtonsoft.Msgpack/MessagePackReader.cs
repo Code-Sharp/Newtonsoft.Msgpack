@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Newtonsoft.Msgpack
 {
-    internal class MessagePackReader : JsonReader
+    public class MessagePackReader : JsonReader
     {
         private bool mFirstRead = true;
         private State mState;

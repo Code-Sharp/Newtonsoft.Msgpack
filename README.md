@@ -35,7 +35,7 @@ using (MemoryStream stream = new MemoryStream(bytes))
 
 ##Want to help?
 
-Contribute in any way! pull requests will be appriciated.
+Contribute in any way! pull requests will be appreciated.
 
 [MsgPackCliLink]:https://github.com/msgpack/msgpack-cli
 [JsonNetLink]:https://github.com/JamesNK/Newtonsoft.Json

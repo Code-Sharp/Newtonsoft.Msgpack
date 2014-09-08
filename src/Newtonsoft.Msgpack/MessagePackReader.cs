@@ -173,12 +173,11 @@ namespace Newtonsoft.Msgpack
                 }
             }
 
-            protected bool EndState(JsonToken state)
+            protected void EndState(JsonToken state)
             {
                 mReader.SetToken(state);
                 mReader.mState = this.mPreviousState;
                 mUnpacker.Dispose();
-                return true;
             }
 
             public int? ReadAsInt32()
@@ -191,15 +190,27 @@ namespace Newtonsoft.Msgpack
                     mReader.SetToken(JsonToken.Integer, result);
                     return result;
                 }
+                else
+                {
+                    EndState();
+                }
 
                 return null;
+            }
+
+            protected virtual void EndState()
+            {
             }
 
             public string ReadAsString()
             {
                 string result;
 
-                if (Unpacker.ReadString(out result))
+                if (!Unpacker.ReadString(out result))
+                {
+                    EndState();
+                }
+                else
                 {
                     Proceed();
                     mReader.SetToken(JsonToken.String, result);
@@ -213,7 +224,11 @@ namespace Newtonsoft.Msgpack
             {
                 byte[] result;
 
-                if (Unpacker.ReadBinary(out result))
+                if (!Unpacker.ReadBinary(out result))
+                {
+                    EndState();
+                }
+                else
                 {
                     Proceed();
                     mReader.SetToken(JsonToken.Bytes, result);
@@ -228,7 +243,11 @@ namespace Newtonsoft.Msgpack
                 bool hasResult = false;
                 decimal? result = null;
 
-                if (Unpacker.Read())
+                if (!Unpacker.Read())
+                {
+                    EndState();
+                }
+                else
                 {
                     try
                     {
@@ -290,13 +309,19 @@ namespace Newtonsoft.Msgpack
             {
                 if (!base.Read())
                 {
-                    return EndState(JsonToken.EndArray);
+                    EndState();
                 }
                 else
                 {
                     ReadValue();
-                    return true;
                 }
+
+                return true;
+            }
+
+            protected override void EndState()
+            {
+                EndState(JsonToken.EndArray);
             }
         }
 
@@ -313,7 +338,7 @@ namespace Newtonsoft.Msgpack
             {
                 if (!base.Read())
                 {
-                    EndState(JsonToken.EndObject);
+                    EndState();
                     return true;
                 }
                 else
@@ -331,6 +356,11 @@ namespace Newtonsoft.Msgpack
 
                     return true;
                 }
+            }
+
+            protected override void EndState()
+            {
+                EndState(JsonToken.EndObject);
             }
 
             protected override void Proceed()

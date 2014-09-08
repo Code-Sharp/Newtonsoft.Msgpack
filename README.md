@@ -14,10 +14,14 @@ This allows you to read/write from Msgpack streams with your favorite [Json.NET]
 
 This supports only Msgpack Map serialization, I think that array serialization doesn't really fit here.
 
+##Status
+Not very mature yet, still doesn't deal with exotic types like TimeSpan/Guid/BigInteger.
+
+A NuGet package is planned when this will be more stable.
 
 ##Usage
 
-Example based on Newtonsoft.Json BSON support [sample][BsonLink] (Note: this sample runs only on the custom-serializers branch)
+Example based on Newtonsoft.Json BSON support [sample][BsonLink] (Note: this sample works only on the custom-serializers branch)
 
 ```csharp
 Product product = new Product

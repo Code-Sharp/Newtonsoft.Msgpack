@@ -17,20 +17,40 @@ This supports only Msgpack Map serialization, I think that array serialization d
 
 ##Usage
 
-Currently only JsonReader is implemented, but JsonWriter will be implemented soon.
-
+Example based on Newtonsoft.Json BSON support [sample][BsonLink] (Note: this sample runs only on the custom-serializers branch)
 
 ```csharp
-using (MemoryStream stream = new MemoryStream(bytes))
-{
-    using (MessagePackReader reader = new MessagePackReader(stream))
+Product product = new Product
     {
-        JsonSerializer jsonSerializer = new JsonSerializer();
+        ExpiryDate = DateTime.Parse("2009-04-05T14:45:00Z"),
+        Name = "Carlos' Spicy Wieners",
+        Price = 9.95m,
+        Sizes = new[] {"Small", "Medium", "Large"}
+    };
 
-        Person person =
-            jsonSerializer.Deserialize<Person>(reader);
-    }                
-}
+MemoryStream memoryStream = new MemoryStream();
+JsonSerializer serializer = new JsonSerializer();
+
+// serialize product to MessagePack
+MessagePackWriter writer = new MessagePackWriter(memoryStream);
+serializer.Serialize(writer, product);
+
+Console.WriteLine(BitConverter.ToString(memoryStream.ToArray()));
+
+// 84-A4-4E-61-6D-65-B5-43-61-72-6C-6F-73-27-20-53-70-69-
+// 63-79-20-57-69-65-6E-65-72-73-A5-50-72-69-63-65-A4-39-
+// 2E-39-35-A5-53-69-7A-65-73-93-A5-53-6D-61-6C-6C-A6-4D-
+// 65-64-69-75-6D-A5-4C-61-72-67-65-AA-45-78-70-69-72-79-
+// 44-61-74-65-D3-00-00-01-20-76-BD-51-E0
+
+memoryStream.Seek(0, SeekOrigin.Begin);
+
+// deserialize product from MessagePack
+MessagePackReader reader = new MessagePackReader(memoryStream);
+Product deserializedProduct = serializer.Deserialize<Product>(reader);
+
+Console.WriteLine(deserializedProduct.Name);
+// Carlos' Spicy Wieners
 ```
 
 ##Want to help?
@@ -39,3 +59,4 @@ Contribute in any way! pull requests will be appreciated.
 
 [MsgPackCliLink]:https://github.com/msgpack/msgpack-cli
 [JsonNetLink]:https://github.com/JamesNK/Newtonsoft.Json
+[BsonLink]:http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support

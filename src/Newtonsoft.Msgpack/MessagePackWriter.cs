@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using MsgPack;
+using MsgPack.Serialization;
 using Newtonsoft.Json;
 
 namespace Newtonsoft.Msgpack
@@ -29,127 +31,7 @@ namespace Newtonsoft.Msgpack
             WritePrimitive(value);
         }
 
-        public override void WriteValue(sbyte? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(byte? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(ushort? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(short? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(bool? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(double? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(float? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(ulong? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(long? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(uint? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(int? value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(sbyte value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(byte value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(ushort value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(short value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(bool value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(double value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(float value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(ulong value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(long value)
-        {
-            base.WriteValue(value);
-            WritePrimitive(value);
-        }
-
-        public override void WriteValue(uint value)
+        public override void WriteValue(string value)
         {
             base.WriteValue(value);
             WritePrimitive(value);
@@ -158,13 +40,223 @@ namespace Newtonsoft.Msgpack
         public override void WriteValue(int value)
         {
             base.WriteValue(value);
-            WritePrimitive(value);
+            WritePrimitive(new Int32MsgpackValue(mState, value));
         }
 
-        public override void WriteValue(string value)
+        public override void WriteValue(uint value)
         {
             base.WriteValue(value);
-            WritePrimitive(value);
+            WritePrimitive(new UInt32MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(long value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new Int64MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(ulong value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new UInt64MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(float value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new SingleMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(double value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new DoubleMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(bool value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new BooleanMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(short value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new Int16MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(ushort value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new UInt16MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(char value)
+        {
+            base.WriteValue(value);
+            WritePredefined<char>(value);
+        }
+
+        public override void WriteValue(byte value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new ByteMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(sbyte value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new SByteMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(decimal value)
+        {
+            base.WriteValue(value);
+            WritePredefined<decimal>(value);
+        }
+
+        public override void WriteValue(DateTime value)
+        {
+            base.WriteValue(value);
+            WritePredefined<DateTime>(value);
+        }
+
+        public override void WriteValue(DateTimeOffset value)
+        {
+            base.WriteValue(value);
+            WritePredefined<DateTimeOffset>(value);
+        }
+
+        public override void WriteValue(Guid value)
+        {
+            base.WriteValue(value);
+            WritePredefined<Guid>(value);
+        }
+
+        public override void WriteValue(TimeSpan value)
+        {
+            base.WriteValue(value);
+            WritePredefined<TimeSpan>(value);
+        }
+
+        public override void WriteValue(Uri value)
+        {
+            base.WriteValue(value);
+            WritePredefined<Uri>(value);
+        }
+
+        public override void WriteValue(object value)
+        {
+            if (value is BigInteger)
+            {
+                WritePredefined((BigInteger)value);
+            }
+            else
+            {
+                base.WriteValue(value);
+            }
+        }
+
+        public override void WriteValue(int? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableInt32MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(uint? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableUInt32MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(long? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableInt64MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(ulong? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableUInt64MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(float? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableSingleMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(double? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableDoubleMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(bool? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableBooleanMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(short? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableInt16MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(ushort? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableUInt16MsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(char? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<char?>(value);
+        }
+
+        public override void WriteValue(byte? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableByteMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(sbyte? value)
+        {
+            base.WriteValue(value);
+            WritePrimitive(new NullableSByteMsgpackValue(mState, value));
+        }
+
+        public override void WriteValue(decimal? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<decimal?>(value);
+        }
+
+        public override void WriteValue(DateTime? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<DateTime?>(value);
+        }
+
+        public override void WriteValue(DateTimeOffset? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<DateTimeOffset?>(value);
+        }
+
+        public override void WriteValue(Guid? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<Guid?>(value);
+        }
+
+        public override void WriteValue(TimeSpan? value)
+        {
+            base.WriteValue(value);
+            WritePredefined<TimeSpan?>(value);
         }
 
         public override void WriteNull()
@@ -193,8 +285,8 @@ namespace Newtonsoft.Msgpack
 
         public override void WriteEndObject()
         {
-            base.WriteEndObject();
             EndState();
+            base.WriteEndObject();
         }
 
         public override void WriteStartObject()
@@ -214,116 +306,6 @@ namespace Newtonsoft.Msgpack
             WritePrimitive(new StringMsgpackValue(mState, value));
         }
 
-        private void WritePrimitive(float value)
-        {
-            WritePrimitive(new SingleMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(double value)
-        {
-            WritePrimitive(new DoubleMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(ulong value)
-        {
-            WritePrimitive(new UInt64MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(long value)
-        {
-            WritePrimitive(new Int64MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(uint value)
-        {
-            WritePrimitive(new UInt32MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(int value)
-        {
-            WritePrimitive(new Int32MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(ushort value)
-        {
-            WritePrimitive(new UInt16MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(short value)
-        {
-            WritePrimitive(new Int16MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(sbyte value)
-        {
-            WritePrimitive(new SByteMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(byte value)
-        {
-            WritePrimitive(new ByteMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(bool value)
-        {
-            WritePrimitive(new BooleanMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(float? value)
-        {
-            WritePrimitive(new NullableSingleMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(double? value)
-        {
-            WritePrimitive(new NullableDoubleMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(ulong? value)
-        {
-            WritePrimitive(new NullableUInt64MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(long? value)
-        {
-            WritePrimitive(new NullableInt64MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(uint? value)
-        {
-            WritePrimitive(new NullableUInt32MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(int? value)
-        {
-            WritePrimitive(new NullableInt32MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(ushort? value)
-        {
-            WritePrimitive(new NullableUInt16MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(short? value)
-        {
-            WritePrimitive(new NullableInt16MsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(sbyte? value)
-        {
-            WritePrimitive(new NullableSByteMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(byte? value)
-        {
-            WritePrimitive(new NullableByteMsgpackValue(mState, value));
-        }
-
-        private void WritePrimitive(bool? value)
-        {
-            WritePrimitive(new NullableBooleanMsgpackValue(mState, value));
-        }
-
         private void WritePrimitive<T>(MsgpackValue<T> msgpackValue)
         {
             if (mState != null)
@@ -335,6 +317,11 @@ namespace Newtonsoft.Msgpack
                 SetState(msgpackValue);
                 EndState();
             }
+        }
+
+        private void WritePredefined<T>(T value)
+        {
+            WritePrimitive(new MsgpackPredefinedValue<T>(mState, value));
         }
 
         private void SetState(MsgpackToken token)
@@ -492,6 +479,19 @@ namespace Newtonsoft.Msgpack
             public override void AddChild(string propertyName, MsgpackToken child)
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private class MsgpackPredefinedValue<T> : MsgpackValue<T>
+        {
+            public MsgpackPredefinedValue(MsgpackToken parent, T value) :
+                base(parent, value)
+            {
+            }
+
+            public override void Pack(Packer packer)
+            {
+                packer.Pack(this.Value);
             }
         }
 

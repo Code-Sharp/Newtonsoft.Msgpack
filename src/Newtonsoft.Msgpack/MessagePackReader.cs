@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using MsgPack;
+using MsgPack.Serialization;
 using Newtonsoft.Json;
 
 namespace Newtonsoft.Msgpack
@@ -83,12 +84,16 @@ namespace Newtonsoft.Msgpack
             protected Unpacker mUnpacker;
 
             protected readonly State mPreviousState;
+            private readonly MessagePackSerializer<DateTime?> mDateTimeSerializer;
+            private readonly MessagePackSerializer<DateTimeOffset> mDateTimeOffsetSerializer;
 
             public State(MessagePackReader reader, Unpacker unpacker, State previousState)
             {
                 mReader = reader;
                 mUnpacker = unpacker;
                 mPreviousState = previousState;
+                mDateTimeSerializer = SerializationContext.Default.GetSerializer<DateTime?>();
+                mDateTimeOffsetSerializer = SerializationContext.Default.GetSerializer<DateTimeOffset>();
             }
 
             public Unpacker Unpacker
@@ -128,28 +133,29 @@ namespace Newtonsoft.Msgpack
                 {
                     newState = JsonToken.PropertyName;
                 }
-                else if (lastReadData.IsNil)
+                
+                if (lastReadData.IsNil)
                 {
                     JsonToken state = newState ?? JsonToken.Null;
                     mReader.SetToken(state, null);
                 }
-                else if (lastReadData.IsTypeOf<byte[]>() == true)
+                else if (lastReadData.UnderlyingType == typeof(byte[]))
                 {
                     JsonToken state = newState ?? JsonToken.Bytes;
                     mReader.SetToken(state, lastReadData.AsBinary());                    
                 }
-                else if (lastReadData.IsTypeOf<bool>() == true)
+                else if (lastReadData.UnderlyingType == typeof(bool))
                 {
                     JsonToken state = newState ?? JsonToken.Boolean;
                     mReader.SetToken(state, lastReadData.AsBoolean());
                 }
-                if (lastReadData.IsTypeOf<string>() == true)
+                else if (lastReadData.UnderlyingType == typeof(string))
                 {
                     JsonToken state = newState ?? JsonToken.String;
                     mReader.SetToken(state, lastReadData.AsString());
                 }
-                else if (lastReadData.IsTypeOf<double>() == true || 
-                    lastReadData.IsTypeOf<float>() == true)
+                else if (lastReadData.UnderlyingType == typeof(double) ||
+                    lastReadData.UnderlyingType == typeof(float))
                 {
                     JsonToken state = newState ?? JsonToken.Float;
                     mReader.SetToken(state, lastReadData.ToObject());
@@ -221,105 +227,19 @@ namespace Newtonsoft.Msgpack
             {
                 bool hasResult = false;
                 decimal? result = null;
-                double? doubleResult = null;
-                float? floatResult = null;
-                ulong? ulongResult = null;
-                long? longResult = null;
-                uint? uintResult = null;
-                int? intResult = null;
-                sbyte? sbyteResult = null;
-                byte? byteResult = null;
-                ushort? ushortResult = null;
-                short? shortResult = null;
 
-                if (Unpacker.ReadNullableDouble(out doubleResult))
+                if (Unpacker.Read())
                 {
-                    hasResult = true;
+                    try
+                    {
+                        result =
+                            SerializationContext.Default.GetSerializer<decimal?>()
+                                                .UnpackFrom(mUnpacker);
 
-                    if (doubleResult != null)
-                    {
-                        result = new decimal(doubleResult.Value);
+                        hasResult = true;
                     }
-                }
-                else if (Unpacker.ReadNullableSingle(out floatResult))
-                {
-                    hasResult = true;
-
-                    if (floatResult != null)
+                    catch (Exception)
                     {
-                        result = new decimal(floatResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableUInt64(out ulongResult))
-                {
-                    hasResult = true;
-
-                    if (ulongResult != null)
-                    {
-                        result = new decimal(ulongResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableInt64(out longResult))
-                {
-                    hasResult = true;
-
-                    if (longResult != null)
-                    {
-                        result = new decimal(longResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableUInt32(out uintResult))
-                {
-                    hasResult = true;
-
-                    if (uintResult != null)
-                    {
-                        result = new decimal(uintResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableInt32(out intResult))
-                {
-                    hasResult = true;
-
-                    if (intResult != null)
-                    {
-                        result = new decimal(intResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableSByte(out sbyteResult))
-                {
-                    hasResult = true;
-
-                    if (sbyteResult != null)
-                    {
-                        result = new decimal(sbyteResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableByte(out byteResult))
-                {
-                    hasResult = true;
-                    
-                    if (byteResult != null)
-                    {
-                        result = new decimal(byteResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableUInt16(out ushortResult))
-                {
-                    hasResult = true;
-                    
-                    if (ushortResult != null)
-                    {
-                        result = new decimal(ushortResult.Value);
-                    }
-                }
-                else if (Unpacker.ReadNullableInt16(out shortResult))
-                {
-                    hasResult = true;
-                    
-                    if (shortResult != null)
-                    {
-                        result = new decimal(shortResult.Value);
                     }
                 }
 
@@ -332,15 +252,26 @@ namespace Newtonsoft.Msgpack
                 return result;
             }
 
-            // Not supported by message pack.
             public DateTime? ReadAsDateTime()
             {
-                return null;
+                Unpacker.Read();
+                DateTime? result = mDateTimeSerializer.UnpackFrom(Unpacker);
+                
+                mReader.SetToken(JsonToken.Date, result);
+                Proceed();
+
+                return result;
             }
 
             public DateTimeOffset? ReadAsDateTimeOffset()
             {
-                return null;
+                Unpacker.Read();
+                DateTimeOffset? result = mDateTimeOffsetSerializer.UnpackFrom(Unpacker);
+
+                mReader.SetToken(JsonToken.Date, result);
+                Proceed();
+
+                return result;
             }
 
             protected virtual void Proceed()

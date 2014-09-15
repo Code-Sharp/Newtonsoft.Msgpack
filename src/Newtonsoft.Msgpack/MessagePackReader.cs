@@ -120,45 +120,34 @@ namespace Newtonsoft.Msgpack
                 }
                 else
                 {
-                    ReadPrimitive(false);
+                    ReadPrimitive();
                 }
             }
 
-            protected void ReadPrimitive(bool isProperty)
+            protected void ReadPrimitive()
             {
                 MessagePackObject lastReadData = mUnpacker.LastReadData;
-                JsonToken? newState = null;
 
-                if (isProperty)
-                {
-                    newState = JsonToken.PropertyName;
-                }
-                
                 if (lastReadData.IsNil)
                 {
-                    JsonToken state = newState ?? JsonToken.Null;
-                    mReader.SetToken(state, null);
+                    mReader.SetToken(JsonToken.Null, null);
                 }
                 else if (lastReadData.UnderlyingType == typeof(byte[]))
                 {
-                    JsonToken state = newState ?? JsonToken.Bytes;
-                    mReader.SetToken(state, lastReadData.AsBinary());                    
+                    mReader.SetToken(JsonToken.Bytes, lastReadData.AsBinary());                    
                 }
                 else if (lastReadData.UnderlyingType == typeof(bool))
                 {
-                    JsonToken state = newState ?? JsonToken.Boolean;
-                    mReader.SetToken(state, lastReadData.AsBoolean());
+                    mReader.SetToken(JsonToken.Boolean, lastReadData.AsBoolean());
                 }
                 else if (lastReadData.UnderlyingType == typeof(string))
                 {
-                    JsonToken state = newState ?? JsonToken.String;
-                    mReader.SetToken(state, lastReadData.AsString());
+                    mReader.SetToken(JsonToken.String, lastReadData.AsString());
                 }
                 else if (lastReadData.UnderlyingType == typeof(double) ||
                     lastReadData.UnderlyingType == typeof(float))
                 {
-                    JsonToken state = newState ?? JsonToken.Float;
-                    mReader.SetToken(state, lastReadData.ToObject());
+                    mReader.SetToken(JsonToken.Float, lastReadData.ToObject());
                 }
                 else if (lastReadData.IsTypeOf<sbyte>() == true || 
                     lastReadData.IsTypeOf<short>() == true || 
@@ -168,8 +157,7 @@ namespace Newtonsoft.Msgpack
                     lastReadData.IsTypeOf<long>() == true || 
                     lastReadData.IsTypeOf<ulong>() == true)
                 {
-                    JsonToken state = newState ?? JsonToken.Integer;
-                    mReader.SetToken(state, lastReadData.ToObject());
+                    mReader.SetToken(JsonToken.Integer, lastReadData.ToObject());
                 }
             }
 
@@ -274,7 +262,7 @@ namespace Newtonsoft.Msgpack
             public DateTime? ReadAsDateTime()
             {
                 Unpacker.Read();
-                DateTime? result = mDateTimeSerializer.UnpackFrom(Unpacker);
+                DateTime? result = Unpacker.Unpack<DateTime?>();
                 
                 mReader.SetToken(JsonToken.Date, result);
                 Proceed();
@@ -345,7 +333,7 @@ namespace Newtonsoft.Msgpack
                 {
                     if (mKeyValueType == KeyValueType.Key)
                     {
-                        ReadPrimitive(true);
+                        ReadPropertyName();
                         mKeyValueType = KeyValueType.Value;
                     }
                     else
@@ -356,6 +344,13 @@ namespace Newtonsoft.Msgpack
 
                     return true;
                 }
+            }
+
+            private void ReadPropertyName()
+            {
+                string result = mUnpacker.LastReadData.AsString();
+
+                mReader.SetToken(JsonToken.PropertyName, result);
             }
 
             protected override void EndState()

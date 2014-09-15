@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using MsgPack;
-using MsgPack.Serialization;
 using Newtonsoft.Json;
 
 namespace Newtonsoft.Msgpack
@@ -130,13 +129,13 @@ namespace Newtonsoft.Msgpack
         public override void WriteValue(Guid value)
         {
             base.WriteValue(value);
-            WritePredefined<Guid>(value);
+            WritePrimitive(new GuidMsgpackValue(mState, value));
         }
 
         public override void WriteValue(TimeSpan value)
         {
             base.WriteValue(value);
-            WritePredefined<TimeSpan>(value);
+            WritePrimitive(new TimeSpanMsgpackValue(mState, value));
         }
 
         public override void WriteValue(Uri value)
@@ -149,12 +148,18 @@ namespace Newtonsoft.Msgpack
         {
             if (value is BigInteger)
             {
-                WritePredefined((BigInteger)value);
+                WriteBigInteger((BigInteger)value);
+                SetWriteState(JsonToken.Integer, value);
             }
             else
             {
                 base.WriteValue(value);
             }
+        }
+
+        private void WriteBigInteger(BigInteger value)
+        {
+            WritePrimitive(new BigIntegerMsgpackValue(mState, value));
         }
 
         public override void WriteValue(int? value)
@@ -344,7 +349,7 @@ namespace Newtonsoft.Msgpack
 
             if (mState == null)
             {
-                Packer packer = Packer.Create(mStream);
+                Packer packer = Packer.Create(mStream, PackerCompatibilityOptions.None);
                 mDocument.Pack(packer);
             }
         }
@@ -801,6 +806,7 @@ namespace Newtonsoft.Msgpack
 
             public override void Pack(Packer packer)
             {
+                packer.PackBinaryHeader(this.Value.Length);
                 packer.PackBinary(this.Value);
             }
         }
@@ -814,6 +820,45 @@ namespace Newtonsoft.Msgpack
             public override void Pack(Packer packer)
             {
                 packer.PackString(this.Value);
+            }
+        }
+
+        private class BigIntegerMsgpackValue : MsgpackValue<BigInteger>
+        {
+            public BigIntegerMsgpackValue(MsgpackToken parent, BigInteger value)
+                : base(parent, value)
+            {
+            }
+
+            public override void Pack(Packer packer)
+            {
+                packer.PackBinary(this.Value.ToByteArray());
+            }
+        }
+
+        private class GuidMsgpackValue : MsgpackValue<Guid>
+        {
+            public GuidMsgpackValue(MsgpackToken parent, Guid value)
+                : base(parent, value)
+            {
+            }
+
+            public override void Pack(Packer packer)
+            {
+                packer.PackBinary(this.Value.ToByteArray());
+            }
+        }
+
+        private class TimeSpanMsgpackValue : MsgpackValue<TimeSpan>
+        {
+            public TimeSpanMsgpackValue(MsgpackToken parent, TimeSpan value)
+                : base(parent, value)
+            {
+            }
+
+            public override void Pack(Packer packer)
+            {
+                packer.PackString(this.Value.ToString());
             }
         }
     }

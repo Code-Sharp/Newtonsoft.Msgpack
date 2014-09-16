@@ -1,5 +1,8 @@
 #Newtonsoft.Msgpack
 
+[![AppVeyor Build][AppVeyorStatus]][AppVeyorLastBuild]
+[![NuGet Version][NuGetPackageVersion]][NuGetPackage]
+
 This project brings [msgpack-cli][MsgPackCliLink] to [Json.NET][JsonNetLink].
 
 It actually contains an implementation of JsonReader/JsonWriter using msgpack-cli Unpacker/Packer classes.
@@ -18,7 +21,7 @@ This supports only Msgpack Map serialization, I think that array serialization d
 
 Should handle simple scenarios. If it doesn't work for you, please open an issue.
 
-A NuGet package is [available ![NuGet Version][NuGetPackageVersion]][NuGetPackage].
+A NuGet package is [available][NuGetPackage].
 
 
 ##Usage
@@ -68,3 +71,5 @@ Contribute in any way! pull requests will be appreciated.
 [BsonLink]:http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support
 [NuGetPackage]:https://www.nuget.org/packages/Newtonsoft.Msgpack/0.1.0
 [NuGetPackageVersion]:http://img.shields.io/nuget/v/Newtonsoft.Msgpack.svg
+[AppVeyorStatus]:http://img.shields.io/appveyor/ci/darkl/newtonsoft-msgpack.svg
+[AppVeyorLastBuild]:https://ci.appveyor.com/project/darkl/newtonsoft-msgpack

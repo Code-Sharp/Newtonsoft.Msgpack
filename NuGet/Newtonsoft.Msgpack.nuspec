@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>$version$</version>
+    <authors>CodeSharp</authors>
+    <owners />
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="[6.0.5]" />
+      <dependency id="MsgPack.Cli" version="[0.5.3]" />
+    </dependencies>
+    <id>Newtonsoft.Msgpack</id>
+    <title>Newtonsoft Msgpack</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A library bridging between Newtonsoft.Json and msgpack-cli - allows you to deserialize message pack streams with your favorite Newtonsoft.Json options.</description>
+    <projectUrl>https://github.com/darkl/Newtonsoft.Msgpack</projectUrl>
+  </metadata>
+  <files>
+    <file src="bin\net45\Newtonsoft.Msgpack.dll" target="lib\net45\Newtonsoft.Msgpack.dll" />
+  </files>
+</package>

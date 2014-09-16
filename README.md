@@ -15,9 +15,11 @@ This allows you to read/write from Msgpack streams with your favorite [Json.NET]
 This supports only Msgpack Map serialization, I think that array serialization doesn't really fit here.
 
 ##Status
-Not very mature yet, still doesn't deal with exotic types like TimeSpan/Guid/BigInteger.
 
-A NuGet package is planned when this will be more stable.
+Should handle simple scenarios. If it doesn't work for you, please open an issue.
+
+A NuGet package is [available [![NuGet Version][NuGetPackageVersion]]][NuGetPackage].
+
 
 ##Usage
 
@@ -64,3 +66,5 @@ Contribute in any way! pull requests will be appreciated.
 [MsgPackCliLink]:https://github.com/msgpack/msgpack-cli
 [JsonNetLink]:https://github.com/JamesNK/Newtonsoft.Json
 [BsonLink]:http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support
+[NuGetPackage]:https://www.nuget.org/packages/Newtonsoft.Msgpack/0.1.0
+[NuGetPackageVersion]:http://img.shields.io/nuget/v/Newtonsoft.Msgpack.svg

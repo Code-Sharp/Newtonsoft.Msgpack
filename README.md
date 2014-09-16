@@ -69,7 +69,7 @@ Contribute in any way! pull requests will be appreciated.
 [MsgPackCliLink]:https://github.com/msgpack/msgpack-cli
 [JsonNetLink]:https://github.com/JamesNK/Newtonsoft.Json
 [BsonLink]:http://james.newtonking.com/archive/2009/12/26/json-net-3-5-release-6-binary-json-bson-support
-[NuGetPackage]:https://www.nuget.org/packages/Newtonsoft.Msgpack/0.1.0
+[NuGetPackage]:https://www.nuget.org/packages/Newtonsoft.Msgpack/
 [NuGetPackageVersion]:http://img.shields.io/nuget/v/Newtonsoft.Msgpack.svg
 [AppVeyorStatus]:http://img.shields.io/appveyor/ci/darkl/newtonsoft-msgpack.svg
 [AppVeyorLastBuild]:https://ci.appveyor.com/project/darkl/newtonsoft-msgpack

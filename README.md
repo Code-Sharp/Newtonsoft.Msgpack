@@ -18,7 +18,7 @@ This supports only Msgpack Map serialization, I think that array serialization d
 
 Should handle simple scenarios. If it doesn't work for you, please open an issue.
 
-A NuGet package is [available [![NuGet Version][NuGetPackageVersion]]][NuGetPackage].
+A NuGet package is [available ![NuGet Version][NuGetPackageVersion]][NuGetPackage].
 
 
 ##Usage

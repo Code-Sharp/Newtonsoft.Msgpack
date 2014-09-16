@@ -26,7 +26,7 @@ A NuGet package is [available][NuGetPackage].
 
 ##Usage
 
-Example based on Newtonsoft.Json BSON support [sample][BsonLink] (Note: this sample works only on the custom-serializers branch)
+Example based on Newtonsoft.Json BSON support [sample][BsonLink]
 
 ```csharp
 Product product = new Product

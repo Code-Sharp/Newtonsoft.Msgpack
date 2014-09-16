@@ -1,4 +1,4 @@
-# Travis-CI Build for NewtonSoft.Msgpack
+# Travis-CI Build for Newtonsoft.Msgpack
 # Copied from WampSharp
 # Copied from keyczar-dotnet
 # see travis-ci.org for details
@@ -12,7 +12,7 @@ env:
   - MONO_VER="3.8.0"
 
 before_install:
- - wget "http://download.mono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
+ - wget "http://download.sono-project.com/archive/${MONO_VER}/macos-10-x86/MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg"
  - sudo installer -pkg "MonoFramework-MDK-${MONO_VER}.macos10.xamarin.x86.pkg" -target /
 
 script:
@@ -22,4 +22,3 @@ script:
 branches:
  only:
   - master
-  

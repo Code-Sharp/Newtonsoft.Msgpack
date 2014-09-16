@@ -13,6 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A library bridging between Newtonsoft.Json and msgpack-cli - allows you to deserialize message pack streams with your favorite Newtonsoft.Json options.</description>
     <projectUrl>https://github.com/darkl/Newtonsoft.Msgpack</projectUrl>
+    <tags>msgpack newtonsoft</tags>
   </metadata>
   <files>
     <file src="bin\net45\Newtonsoft.Msgpack.dll" target="lib\net45\Newtonsoft.Msgpack.dll" />

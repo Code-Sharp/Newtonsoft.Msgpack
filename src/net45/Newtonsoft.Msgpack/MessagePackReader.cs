@@ -324,6 +324,12 @@ namespace Newtonsoft.Msgpack
 
             public override bool Read()
             {
+                if (mKeyValueType == KeyValueType.Key)
+                {
+                    bool readKey = ReadKey();
+                    return true;
+                }
+
                 if (!base.Read())
                 {
                     EndState();
@@ -331,26 +337,40 @@ namespace Newtonsoft.Msgpack
                 }
                 else
                 {
-                    if (mKeyValueType == KeyValueType.Key)
-                    {
-                        ReadPropertyName();
-                        mKeyValueType = KeyValueType.Value;
-                    }
-                    else
-                    {
-                        ReadValue();
-                        mKeyValueType = KeyValueType.Key;
-                    }
-
-                    return true;
+                    ReadValue();
+                    mKeyValueType = KeyValueType.Key;
                 }
+
+                return true;
             }
 
-            private void ReadPropertyName()
+            private bool ReadKey()
             {
-                string result = mUnpacker.LastReadData.AsString();
+                bool result = TryReadPropertyName();
 
-                mReader.SetToken(JsonToken.PropertyName, result);
+                if (result)
+                {
+                    mKeyValueType = KeyValueType.Value;
+                }
+                else
+                {
+                    EndState();
+                }
+
+                return result;
+            }
+
+            private bool TryReadPropertyName()
+            {
+                string value;
+                bool readSuccess = mUnpacker.ReadString(out value);
+
+                if (readSuccess)
+                {
+                    mReader.SetToken(JsonToken.PropertyName, value);                    
+                }
+
+                return readSuccess;
             }
 
             protected override void EndState()

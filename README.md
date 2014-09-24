@@ -23,6 +23,9 @@ Should handle simple scenarios. If it doesn't work for you, please open an issue
 
 A NuGet package is [available][NuGetPackage].
 
+###Performance
+
+Currently this libary isn't very fast - both Newtonsoft.Json and msgpack-cli perform faster. Profiling a benchmark test shows that a lot of time is spent on msgpack-cli methods, in particular on Packer/Unpacker string methods. 
 
 ##Usage
 

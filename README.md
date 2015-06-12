@@ -15,7 +15,7 @@ This allows you to read/write from Msgpack streams with your favorite [Json.NET]
 
 ##Why not?
 
-This supports only Msgpack Map serialization, I think that array serialization doesn't really fit here.
+This supports only Msgpack map serialization method, I think that array serialization method doesn't really fit here.
 
 ##Status
 

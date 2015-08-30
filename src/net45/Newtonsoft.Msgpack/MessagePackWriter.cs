@@ -806,7 +806,6 @@ namespace Newtonsoft.Msgpack
 
             public override void Pack(Packer packer)
             {
-                packer.PackBinaryHeader(this.Value.Length);
                 packer.PackBinary(this.Value);
             }
         }

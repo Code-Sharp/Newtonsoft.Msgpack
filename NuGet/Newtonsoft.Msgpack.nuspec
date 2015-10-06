@@ -5,8 +5,8 @@
     <authors>CodeSharp</authors>
     <owners />
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="[6.0.6]" />
-      <dependency id="MsgPack.Cli" version="[0.5.4]" />
+      <dependency id="Newtonsoft.Json" version="[6.0.5, 7)" />
+      <dependency id="MsgPack.Cli" version="[0.6.2, 0.7)" />
     </dependencies>
     <id>Newtonsoft.Msgpack</id>
     <title>Newtonsoft Msgpack</title>

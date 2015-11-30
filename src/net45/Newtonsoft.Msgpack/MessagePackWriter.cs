@@ -117,7 +117,30 @@ namespace Newtonsoft.Msgpack
         public override void WriteValue(DateTime value)
         {
             base.WriteValue(value);
-            WritePredefined<DateTime>(value);
+
+            if (this.WriteDateTimeAsString)
+            {
+                string asString = ConvertDateTimeToString(value);
+
+                WritePredefined<string>(asString);
+            }
+            else
+            {
+                WritePredefined<DateTime>(value);
+            }
+        }
+
+        private string ConvertDateTimeToString(DateTime dateTime)
+        {
+            string formatted = JsonConvert.ToString(dateTime, this.DateFormatHandling, this.DateTimeZoneHandling);
+
+            return formatted.Substring(1, formatted.Length - 2);
+        }
+
+        public bool WriteDateTimeAsString
+        {
+            get;
+            set;
         }
 
         public override void WriteValue(DateTimeOffset value)

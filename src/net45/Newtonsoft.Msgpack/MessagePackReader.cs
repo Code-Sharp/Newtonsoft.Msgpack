@@ -262,12 +262,27 @@ namespace Newtonsoft.Msgpack
             public DateTime? ReadAsDateTime()
             {
                 Unpacker.Read();
-                DateTime? result = Unpacker.Unpack<DateTime?>();
-                
+
+                DateTime? result;
+
+                if (Unpacker.LastReadData.IsTypeOf<string>() == true)
+                {
+                    result = ParseDateTimeString(Unpacker.LastReadData.AsString());
+                }
+                else
+                {
+                    result = Unpacker.Unpack<DateTime?>();
+                }
+
                 mReader.SetToken(JsonToken.Date, result);
                 Proceed();
 
                 return result;
+            }
+
+            private DateTime? ParseDateTimeString(string readDateTime)
+            {
+                return JsonConvert.DeserializeObject<DateTime>(@"""" + readDateTime + @"""");
             }
 
             public DateTimeOffset? ReadAsDateTimeOffset()

@@ -77,7 +77,7 @@ namespace Newtonsoft.Msgpack
 
         #endregion
 
-        private class State
+        private new class State
         {
             protected readonly MessagePackReader mReader;
 

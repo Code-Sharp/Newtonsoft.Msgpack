@@ -13,8 +13,8 @@
   "description": "A library bridging between Newtonsoft.Json and msgpack-cli - allows you to deserialize message pack streams with your favorite Newtonsoft.Json options.",
   "version": "0.1.9-*",
   "dependencies": {
-    "MsgPack.Cli": "0.7.1",
-    "Newtonsoft.Json": "9.0.1"
+    "MsgPack.Cli": "0.6.2",
+    "Newtonsoft.Json": "6.0.5"
   },
   "frameworks": {
     "net40": {

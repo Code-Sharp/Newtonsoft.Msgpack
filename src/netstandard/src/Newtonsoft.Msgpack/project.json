@@ -1,0 +1,21 @@
+﻿{
+  "version": "0.1.7-*",
+  "dependencies": {
+    "MsgPack.Cli": "0.7.1",
+    "Newtonsoft.Json": "9.0.1"
+  },
+  "frameworks": {
+    "net40": {
+      "frameworkAssemblies": {
+        "System.Numerics": "" 
+      }
+    },
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Numerics": ""
+      }
+    },
+    "netstandard1.1": {
+    }
+  }
+}

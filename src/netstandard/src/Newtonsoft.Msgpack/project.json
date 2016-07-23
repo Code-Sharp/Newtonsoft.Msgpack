@@ -15,20 +15,20 @@
   "frameworks": {
     "net40": {
       "frameworkAssemblies": {
-        "System.Numerics": "",
-        "dependencies": {
-          "MsgPack.Cli": "0.6.2",
-          "Newtonsoft.Json": "6.0.5"
-        }
+        "System.Numerics": ""
+      },
+      "dependencies": {
+        "MsgPack.Cli": "0.6.2",
+        "Newtonsoft.Json": "6.0.5"
       }
     },
     "net45": {
       "frameworkAssemblies": {
-        "System.Numerics": "",
-        "dependencies": {
-          "MsgPack.Cli": "0.6.2",
-          "Newtonsoft.Json": "6.0.5"
-        }
+        "System.Numerics": ""
+      },
+      "dependencies": {
+        "MsgPack.Cli": "0.6.2",
+        "Newtonsoft.Json": "6.0.5"
       }
     },
     "netstandard1.1": {

@@ -56,10 +56,10 @@
     <Compile Include="..\..\netstandard\src\Newtonsoft.Msgpack\MessagePackReader.cs">
       <Link>MessagePackReader.cs</Link>
     </Compile>
-    <Compile Include="..\..\netstandard\src\MessagePackWriter.cs">
+    <Compile Include="..\..\netstandard\src\Newtonsoft.Msgpack\MessagePackWriter.cs">
       <Link>MessagePackWriter.cs</Link>
     </Compile>
-    <Compile Include="..\..\net45\Newtonsoft.Msgpack\Properties\AssemblyInfo.cs">
+    <Compile Include="..\..\netstandard\src\Newtonsoft.Msgpack\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>

@@ -11,7 +11,7 @@
     "projectUrl": "https://github.com/darkl/Newtonsoft.Msgpack"
   },
   "description": "A library bridging between Newtonsoft.Json and msgpack-cli - allows you to deserialize message pack streams with your favorite Newtonsoft.Json options.",
-  "version": "0.1.9-*",
+  "version": "0.1.10-*",
   "frameworks": {
     "net40": {
       "frameworkAssemblies": {

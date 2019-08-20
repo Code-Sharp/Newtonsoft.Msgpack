@@ -300,7 +300,7 @@ namespace Newtonsoft.Msgpack
             public abstract void Pack(Packer packer);
         }
 
-        private class MsgpackObject : MsgpackToken
+        private sealed class MsgpackObject : MsgpackToken
         {
             private readonly List<MsgpackProperty> mChildren = new List<MsgpackProperty>();
 
@@ -342,13 +342,13 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class MsgpackProperty
+        private sealed class MsgpackProperty
         {
             public string Name { get; set; }
             public MsgpackToken Value { get; set; }
         }
 
-        private class MsgpackArray : MsgpackToken
+        private sealed class MsgpackArray : MsgpackToken
         {
             private readonly List<MsgpackToken> mChildren = new List<MsgpackToken>();
 
@@ -408,7 +408,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class MsgpackPredefinedValue<T> : MsgpackValue<T>
+        private sealed class MsgpackPredefinedValue<T> : MsgpackValue<T>
         {
             public MsgpackPredefinedValue(MsgpackToken parent, T value) :
                 base(parent, value)
@@ -421,7 +421,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class SingleMsgpackValue : MsgpackValue<float>
+        private sealed class SingleMsgpackValue : MsgpackValue<float>
         {
             public SingleMsgpackValue(MsgpackToken parent, float value)
                 : base(parent, value)
@@ -434,7 +434,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class DoubleMsgpackValue : MsgpackValue<double>
+        private sealed class DoubleMsgpackValue : MsgpackValue<double>
         {
             public DoubleMsgpackValue(MsgpackToken parent, double value)
                 : base(parent, value)
@@ -447,7 +447,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class UInt64MsgpackValue : MsgpackValue<ulong>
+        private sealed class UInt64MsgpackValue : MsgpackValue<ulong>
         {
             public UInt64MsgpackValue(MsgpackToken parent, ulong value)
                 : base(parent, value)
@@ -460,7 +460,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class Int64MsgpackValue : MsgpackValue<long>
+        private sealed class Int64MsgpackValue : MsgpackValue<long>
         {
             public Int64MsgpackValue(MsgpackToken parent, long value)
                 : base(parent, value)
@@ -473,7 +473,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class UInt32MsgpackValue : MsgpackValue<uint>
+        private sealed class UInt32MsgpackValue : MsgpackValue<uint>
         {
             public UInt32MsgpackValue(MsgpackToken parent, uint value)
                 : base(parent, value)
@@ -486,7 +486,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class Int32MsgpackValue : MsgpackValue<int>
+        private sealed class Int32MsgpackValue : MsgpackValue<int>
         {
             public Int32MsgpackValue(MsgpackToken parent, int value)
                 : base(parent, value)
@@ -499,7 +499,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class UInt16MsgpackValue : MsgpackValue<ushort>
+        private sealed class UInt16MsgpackValue : MsgpackValue<ushort>
         {
             public UInt16MsgpackValue(MsgpackToken parent, ushort value)
                 : base(parent, value)
@@ -512,7 +512,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class Int16MsgpackValue : MsgpackValue<short>
+        private sealed class Int16MsgpackValue : MsgpackValue<short>
         {
             public Int16MsgpackValue(MsgpackToken parent, short value)
                 : base(parent, value)
@@ -525,7 +525,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class SByteMsgpackValue : MsgpackValue<sbyte>
+        private sealed class SByteMsgpackValue : MsgpackValue<sbyte>
         {
             public SByteMsgpackValue(MsgpackToken parent, sbyte value)
                 : base(parent, value)
@@ -538,7 +538,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class ByteMsgpackValue : MsgpackValue<byte>
+        private sealed class ByteMsgpackValue : MsgpackValue<byte>
         {
             public ByteMsgpackValue(MsgpackToken parent, byte value)
                 : base(parent, value)
@@ -551,7 +551,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class BooleanMsgpackValue : MsgpackValue<bool>
+        private sealed class BooleanMsgpackValue : MsgpackValue<bool>
         {
             public BooleanMsgpackValue(MsgpackToken parent, bool value)
                 : base(parent, value)
@@ -564,7 +564,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class NullMsgValue : MsgpackValue<object>
+        private sealed class NullMsgValue : MsgpackValue<object>
         {
             public NullMsgValue(MsgpackToken parent) : base(parent, null)
             {
@@ -576,7 +576,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class BinaryMsgpackValue : MsgpackValue<byte[]>
+        private sealed class BinaryMsgpackValue : MsgpackValue<byte[]>
         {
             public BinaryMsgpackValue(MsgpackToken parent, byte[] value) : base(parent, value)
             {
@@ -588,7 +588,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class StringMsgpackValue : MsgpackValue<string>
+        private sealed class StringMsgpackValue : MsgpackValue<string>
         {
             public StringMsgpackValue(MsgpackToken parent, string value) : base(parent, value)
             {
@@ -600,7 +600,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class BigIntegerMsgpackValue : MsgpackValue<BigInteger>
+        private sealed class BigIntegerMsgpackValue : MsgpackValue<BigInteger>
         {
             public BigIntegerMsgpackValue(MsgpackToken parent, BigInteger value)
                 : base(parent, value)
@@ -613,7 +613,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class GuidMsgpackValue : MsgpackValue<Guid>
+        private sealed class GuidMsgpackValue : MsgpackValue<Guid>
         {
             public GuidMsgpackValue(MsgpackToken parent, Guid value)
                 : base(parent, value)
@@ -626,7 +626,7 @@ namespace Newtonsoft.Msgpack
             }
         }
 
-        private class TimeSpanMsgpackValue : MsgpackValue<TimeSpan>
+        private sealed class TimeSpanMsgpackValue : MsgpackValue<TimeSpan>
         {
             public TimeSpanMsgpackValue(MsgpackToken parent, TimeSpan value)
                 : base(parent, value)

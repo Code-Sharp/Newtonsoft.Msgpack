@@ -55,62 +55,14 @@ namespace Newtonsoft.MessagePack
             return ReadNormal();
         }
 
-        public override int? ReadAsInt32()
-        {
-            int readSize;
-
-            int? result = NullableInt32Formatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
-
-            return result;
-        }
-
-        public override string ReadAsString()
-        {
-            int readSize;
-
-            string result = NullableStringFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
-
-            return result;
-        }
-
-        public override byte[] ReadAsBytes()
-        {
-            int readSize;
-
-            byte[] result = ByteArrayFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
-
-            return result;
-        }
-
-        public override decimal? ReadAsDecimal()
-        {
-            int readSize;
-
-            decimal result = DecimalFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
-
-            return result;
-        }
-
-        public override DateTime? ReadAsDateTime()
-        {
-            int readSize;
-
-            DateTime? result = NullableDateTimeFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
-
-            return result;
-        }
-
         public override DateTimeOffset? ReadAsDateTimeOffset()
         {
             int readSize;
 
             DateTimeOffset result = DateTimeOffsetFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
             mOffset += readSize;
+
+            this.SetToken(JsonToken.Date, result);
 
             return result;
         }

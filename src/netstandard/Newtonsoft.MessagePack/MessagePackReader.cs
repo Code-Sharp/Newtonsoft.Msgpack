@@ -255,6 +255,7 @@ namespace Newtonsoft.MessagePack
                     SetToken(JsonToken.Date, dateTime);
                     break;
                 case MessagePackType.Nil:
+                    MessagePackBinary.ReadNil(mBytes, mOffset, out readSize);
                     SetToken(JsonToken.Null);
                     break;
                 case MessagePackType.Integer:

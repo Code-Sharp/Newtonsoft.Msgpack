@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using MessagePack;
 using MessagePack.Formatters;
 using Newtonsoft.Json;
@@ -20,12 +21,11 @@ namespace Newtonsoft.MessagePack
 
         private MessagePackType mCurrentElementType;
         private ContainerContext mCurrentContext;
-        private readonly byte[] mBytes;
-        private int mOffset;
+        private readonly Stream mStream;
 
-        public MessagePackReader(byte[] bytes)
+        public MessagePackReader(Stream stream)
         {
-            mBytes = bytes;
+            mStream = stream;
         }
 
         private class ContainerContext
@@ -42,12 +42,13 @@ namespace Newtonsoft.MessagePack
 
         private void ReadElement()
         {
-            mCurrentElementType = MessagePackBinary.GetMessagePackType(mBytes, mOffset);
+            mCurrentElementType =
+                MessagePackCode.ToMessagePackType((byte) PeekByte());
         }
 
         public override bool Read()
         {
-            if (mOffset > mBytes.Length)
+            if (!mStream.CanRead)
             {
                 return false;
             }
@@ -57,10 +58,13 @@ namespace Newtonsoft.MessagePack
 
         public override DateTimeOffset? ReadAsDateTimeOffset()
         {
-            int readSize;
+            byte[] tempArray = MessagePackBinary.ReadMessageBlockFromStreamUnsafe
+                (mStream, false,
+                 out _);
 
-            DateTimeOffset result = DateTimeOffsetFormatter.Instance.Deserialize(mBytes, mOffset, null, out readSize);
-            mOffset += readSize;
+            DateTimeOffset result =
+                DateTimeOffsetFormatter.Instance.Deserialize
+                    (tempArray, 0, null, out _);
 
             this.SetToken(JsonToken.Date, result);
 
@@ -148,9 +152,7 @@ namespace Newtonsoft.MessagePack
 
         private object ReadString()
         {
-            int readSize;
-            string str = MessagePackBinary.ReadString(mBytes, mOffset, out readSize);
-            mOffset += readSize;
+            string str = MessagePackBinary.ReadString(mStream);
             return str;
         }
 
@@ -183,13 +185,13 @@ namespace Newtonsoft.MessagePack
                 {
                     double d;
 
-                    if (MessagePackCode.Float32 == mBytes[mOffset])
+                    if (MessagePackCode.Float32 == PeekByte())
                     {
-                        d = MessagePackBinary.ReadSingle(mBytes, mOffset, out readSize);
+                        d = MessagePackBinary.ReadSingle(mStream);
                     }
                     else
                     {
-                        d = MessagePackBinary.ReadDouble(mBytes, mOffset, out readSize);
+                        d = MessagePackBinary.ReadDouble(mStream);
                     }
 
                     if (FloatParseHandling == FloatParseHandling.Decimal)
@@ -206,7 +208,7 @@ namespace Newtonsoft.MessagePack
 
                 case MessagePackType.String:
                 {
-                    string str = MessagePackBinary.ReadString(mBytes, mOffset, out readSize);
+                    string str = MessagePackBinary.ReadString(mStream);
                     SetToken(JsonToken.String, str);
                     break;
                 }
@@ -217,7 +219,7 @@ namespace Newtonsoft.MessagePack
 
                     ContainerContext newContext = new ContainerContext(MessagePackType.Map);
                     PushContext(newContext);
-                    newContext.Length = MessagePackBinary.ReadMapHeader(mBytes, mOffset, out readSize);
+                    newContext.Length = MessagePackBinary.ReadMapHeader(mStream);
                     break;
                 }
 
@@ -227,12 +229,12 @@ namespace Newtonsoft.MessagePack
 
                     ContainerContext newContext = new ContainerContext(MessagePackType.Array);
                     PushContext(newContext);
-                    newContext.Length = MessagePackBinary.ReadArrayHeader(mBytes, mOffset, out readSize);
+                    newContext.Length = MessagePackBinary.ReadArrayHeader(mStream);
                     break;
                 }
 
                 case MessagePackType.Binary:
-                    byte[] data = MessagePackBinary.ReadBytes(mBytes, mOffset, out readSize);
+                    byte[] data = MessagePackBinary.ReadBytes(mStream);
 
                     SetToken(JsonToken.Bytes, data);
                     break;
@@ -240,60 +242,72 @@ namespace Newtonsoft.MessagePack
                     SetToken(JsonToken.Undefined);
                     break;
                 case MessagePackType.Boolean:
-                    bool b = MessagePackBinary.ReadBoolean(mBytes, mOffset, out readSize);
+                    bool b = MessagePackBinary.ReadBoolean(mStream);
                     SetToken(JsonToken.Boolean, b);
                     break;
                 case MessagePackType.Extension:
-                    ExtensionHeader ext = MessagePackBinary.ReadExtensionFormatHeader(mBytes, mOffset, out readSize);
+                    long streamPosition = mStream.Position;
+                    ExtensionHeader ext = MessagePackBinary.ReadExtensionFormatHeader(mStream);
+                    mStream.Position = streamPosition;
 
                     if (ext.TypeCode != ReservedMessagePackExtensionTypeCode.DateTime)
                     {
                         throw new InvalidOperationException("Invalid primitive bytes.");
                     }
 
-                    DateTime dateTime = MessagePackBinary.ReadDateTime(mBytes, mOffset, out readSize);
+                    DateTime dateTime = MessagePackBinary.ReadDateTime(mStream);
                     SetToken(JsonToken.Date, dateTime);
                     break;
                 case MessagePackType.Nil:
-                    MessagePackBinary.ReadNil(mBytes, mOffset, out readSize);
+                    MessagePackBinary.ReadNil(mStream);
                     SetToken(JsonToken.Null);
                     break;
                 case MessagePackType.Integer:
-                    object integer = ReadInteger(mBytes, mOffset, out readSize);
+                    object integer = ReadInteger();
                     SetToken(JsonToken.Integer, integer);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), "Unexpected MessagePackType value: " + type);
             }
-
-            mOffset += readSize;
         }
 
-        private static object ReadInteger(byte[] bytes, int offset, out int readSize)
+        private object ReadInteger()
         {
-            var code = bytes[offset];
+            var code = PeekByte();
 
             if (MessagePackCode.MinNegativeFixInt <= code && code <= MessagePackCode.MaxNegativeFixInt)
-                return MessagePackBinary.ReadSByte(bytes, offset, out readSize);
+                return MessagePackBinary.ReadSByte(mStream);
             else if (MessagePackCode.MinFixInt <= code && code <= MessagePackCode.MaxFixInt)
-                return MessagePackBinary.ReadByte(bytes, offset, out readSize);
+                return MessagePackBinary.ReadByte(mStream);
             else if (code == MessagePackCode.Int8)
-                return MessagePackBinary.ReadSByte(bytes, offset, out readSize);
+                return MessagePackBinary.ReadSByte(mStream);
             else if (code == MessagePackCode.Int16)
-                return MessagePackBinary.ReadInt16(bytes, offset, out readSize);
+                return MessagePackBinary.ReadInt16(mStream);
             else if (code == MessagePackCode.Int32)
-                return MessagePackBinary.ReadInt32(bytes, offset, out readSize);
+                return MessagePackBinary.ReadInt32(mStream);
             else if (code == MessagePackCode.Int64)
-                return MessagePackBinary.ReadInt64(bytes, offset, out readSize);
+                return MessagePackBinary.ReadInt64(mStream);
             else if (code == MessagePackCode.UInt8)
-                return MessagePackBinary.ReadByte(bytes, offset, out readSize);
+                return MessagePackBinary.ReadByte(mStream);
             else if (code == MessagePackCode.UInt16)
-                return MessagePackBinary.ReadUInt16(bytes, offset, out readSize);
+                return MessagePackBinary.ReadUInt16(mStream);
             else if (code == MessagePackCode.UInt32)
-                return MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
+                return MessagePackBinary.ReadUInt32(mStream);
             else if (code == MessagePackCode.UInt64)
-                return MessagePackBinary.ReadUInt64(bytes, offset, out readSize);
+                return MessagePackBinary.ReadUInt64(mStream);
             throw new InvalidOperationException("Invalid primitive bytes.");
+        }
+
+        private byte? PeekByte()
+        {
+            if (mStream.CanRead)
+            {
+                int result = mStream.ReadByte();
+                mStream.Position--;
+                return (byte) result;
+            }
+
+            return null;
         }
     }
 }

@@ -4,8 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 using MessagePack;
+using Newtonsoft.Json;
 
-namespace Newtonsoft.Json.MessagePack
+namespace Newtonsoft.MessagePack
 {
     /// <remarks>
     /// This class is mostly based on

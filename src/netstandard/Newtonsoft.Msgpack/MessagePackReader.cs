@@ -149,6 +149,16 @@ namespace Newtonsoft.Msgpack
                 {
                     mReader.SetToken(JsonToken.Float, lastReadData.ToObject());
                 }
+                else if (lastReadData.UnderlyingType == typeof(MessagePackExtendedTypeObject))
+                {
+                    MessagePackExtendedTypeObject extendedTypeObject =
+                        lastReadData.AsMessagePackExtendedTypeObject();
+
+                    if (extendedTypeObject.TypeCode == KnownExtTypeCode.Timestamp)
+                    {
+                        mReader.SetToken(JsonToken.Date, lastReadData.AsTimestamp().ToDateTime());
+                    }
+                }
                 else if (lastReadData.IsTypeOf<sbyte>() == true || 
                     lastReadData.IsTypeOf<short>() == true || 
                     lastReadData.IsTypeOf<ushort>() == true || 

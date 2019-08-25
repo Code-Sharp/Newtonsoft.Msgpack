@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using MessagePack;
-using MessagePack.Formatters;
 using Newtonsoft.Json;
+using Newtonsoft.MessagePack.Formatters;
 
 namespace Newtonsoft.MessagePack
 {

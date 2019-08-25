@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Numerics;
-using MessagePack;
 using Newtonsoft.Json;
 
 namespace Newtonsoft.MessagePack
@@ -559,7 +557,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteBytes(stream, this.Value.ToByteArray());
+                MessagePackBinary.WriteBigInteger(stream, this.Value);
             }
         }
 
@@ -572,7 +570,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteBytes(stream, this.Value.ToByteArray());
+                MessagePackBinary.WriteGuid(stream, this.Value);
             }
         }
 
@@ -611,7 +609,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteInt64(stream, this.Value.Ticks);
+                MessagePackBinary.WriteTimeSpan(stream, this.Value);
             }
         }
 
@@ -624,7 +622,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteString(stream, this.Value.ToString(CultureInfo.InvariantCulture));
+                MessagePackBinary.WriteDecimal(stream, this.Value);
             }
         }
 
@@ -637,9 +635,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteArrayHeader(stream, 2);
-                MessagePackBinary.WriteDateTime(stream, new DateTime(this.Value.Ticks, DateTimeKind.Utc));
-                MessagePackBinary.WriteInt16(stream, (short) this.Value.Offset.TotalMinutes);
+                MessagePackBinary.WriteDateTimeOffset(stream, this.Value);
             }
         }
 
@@ -652,7 +648,7 @@ namespace Newtonsoft.MessagePack
 
             public override void Write(Stream stream)
             {
-                MessagePackBinary.WriteString(stream, this.Value.ToString());
+                MessagePackBinary.WriteUri(stream, this.Value);
             }
         }
     }

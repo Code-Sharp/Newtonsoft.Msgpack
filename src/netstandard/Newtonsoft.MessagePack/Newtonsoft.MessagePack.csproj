@@ -6,6 +6,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <authors>CodeSharp</authors>
+    <title>Newtonsoft MessagePack</title>
+    <description>A library bridging between Newtonsoft.Json and MessagePack-CSharp - allows you to serialize/deserialize MessagePack streams with your favorite Newtonsoft.Json options.</description>
+    <RepositoryUrl>https://github.com/Code-Sharp/Newtonsoft.Msgpack/</RepositoryUrl>
+    <tags>messagepack newtonsoft</tags>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>

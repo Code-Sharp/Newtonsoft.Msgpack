@@ -1,17 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net461;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <authors>CodeSharp</authors>
+    <title>Newtonsoft Msgpack</title>
+    <description>A library bridging between Newtonsoft.Json and msgpack-cli - allows you to deserialize message pack streams with your favorite Newtonsoft.Json options.</description>
+    <RepositoryUrl>https://github.com/Code-Sharp/Newtonsoft.Msgpack/</RepositoryUrl>
+    <tags>msgpack newtonsoft</tags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net461' ">
     <PackageReference Include="Newtonsoft.Json" Version="6.0.5" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 

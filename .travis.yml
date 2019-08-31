@@ -1,11 +1,14 @@
 # see http://docs.travis-ci.com/user/languages/csharp/
 
 language: csharp
+mono: latest
+dotnet: 2.0.0
 
-solution: src/mono/WampSharpMono.sln
+before_install: cd src/netstandard/
 
 install:
-  - travis_retry nuget restore src/mono/Newtonsoft.Msgpack.Mono.sln
+- export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
+- dotnet restore
 
 script:
-  - xbuild /p:Configuration=Release src/mono/Newtonsoft.Msgpack.Mono.sln
+ - dotnet build

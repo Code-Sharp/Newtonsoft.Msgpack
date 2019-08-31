@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newtonsoft.Msgpack", "Newtonsoft.Msgpack\Newtonsoft.Msgpack.csproj", "{9E95D6B1-B586-4A4B-A4DD-A4C0C6AF1558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newtonsoft.MessagePack", "Newtonsoft.MessagePack\Newtonsoft.MessagePack.csproj", "{23BF5E8B-EAC7-4AF7-9715-01AD64343CDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewtonsoftMessagePack", "NewtonsoftMessagePack\NewtonsoftMessagePack.csproj", "{519CFE4A-AE01-4F93-B24B-ED5E97C616F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{9E95D6B1-B586-4A4B-A4DD-A4C0C6AF1558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E95D6B1-B586-4A4B-A4DD-A4C0C6AF1558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E95D6B1-B586-4A4B-A4DD-A4C0C6AF1558}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23BF5E8B-EAC7-4AF7-9715-01AD64343CDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23BF5E8B-EAC7-4AF7-9715-01AD64343CDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23BF5E8B-EAC7-4AF7-9715-01AD64343CDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23BF5E8B-EAC7-4AF7-9715-01AD64343CDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{519CFE4A-AE01-4F93-B24B-ED5E97C616F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{519CFE4A-AE01-4F93-B24B-ED5E97C616F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{519CFE4A-AE01-4F93-B24B-ED5E97C616F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{519CFE4A-AE01-4F93-B24B-ED5E97C616F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

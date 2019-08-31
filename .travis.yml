@@ -1,7 +1,7 @@
 # see http://docs.travis-ci.com/user/languages/csharp/
 
 language: csharp
-mono: none
+mono: latest
 dotnet: 2.0.0
 
 before_install: cd src/netstandard/

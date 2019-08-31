@@ -1,6 +1,8 @@
 # see http://docs.travis-ci.com/user/languages/csharp/
 
 language: csharp
+mono: none
+dotnet: 2.0.0
 
 solution: src/netstandard/Newtonsoft.Msgpack.sln
 

@@ -2,10 +2,10 @@
 
 language: csharp
 
-solution: src/mono/WampSharpMono.sln
+solution: src/netstandard/Newtonsoft.Msgpack.sln
 
 install:
-  - travis_retry nuget restore src/mono/Newtonsoft.Msgpack.Mono.sln
+- dotnet restore
 
 script:
-  - xbuild /p:Configuration=Release src/mono/Newtonsoft.Msgpack.Mono.sln
+ - dotnet build
